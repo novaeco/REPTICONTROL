@@ -1,5 +1,6 @@
 #include "ui.h"
 #include "ui_helpers.h"
+#include "ui_timer.h"
 #include "screens/ui_dashboard.h"
 #include "screens/ui_climate.h"
 #include "screens/ui_schedule.h"
@@ -30,11 +31,17 @@ static void nav_button_event_cb(lv_event_t *e);
 void ui_init(void) {
     ESP_LOGI(TAG, "Initializing UI");
     
+    // Initialize LVGL timer
+    ESP_ERROR_CHECK(ui_timer_init());
+    
     // Set theme
     lv_theme_t *theme = lv_theme_default_init(NULL, lv_palette_main(LV_PALETTE_GREEN),
                                             lv_palette_main(LV_PALETTE_GREY),
                                             true, LV_FONT_DEFAULT);
     lv_disp_set_theme(NULL, theme);
+    
+    // Initialize styles
+    init_styles();
     
     // Create screens
     screens[SCREEN_DASHBOARD] = ui_dashboard_create();
@@ -58,9 +65,6 @@ void ui_init(void) {
 }
 
 void ui_update(void) {
-    // Process touchscreen input
-    touch_read();
-    
     // Let LVGL do its work
     lv_timer_handler();
 }
