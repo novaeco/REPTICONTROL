@@ -1,33 +1,55 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(COMPONENT_SRCS
-    "main.c"
-    "app_main.c"
-    "ui/ui.c"
-    "ui/ui_helpers.c"
-    "ui/screens/ui_dashboard.c"
-    "ui/screens/ui_climate.c"
-    "ui/screens/ui_schedule.c"
-    "ui/screens/ui_system.c"
-    "ui/screens/ui_logs.c"
-    "core/climate_controller.c"
-    "core/data_simulator.c"
-    "core/event_logger.c"
-    "core/system_monitor.c"
-    "core/settings_manager.c"
-    "drivers/display_driver.c"
-    "drivers/touch_driver.c"
-    "utils/rtc_manager.c"
-    "utils/animations.c"
+# Project declaration
+project(REPTICONTROL VERSION 1.0.0 LANGUAGES C)
+
+# Set C standard
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# Automatically collect all source files
+file(GLOB_RECURSE COMPONENT_SRCS 
+    "*.c"
 )
 
+# Define include directories
 set(COMPONENT_ADD_INCLUDEDIRS
     "."
-    "ui"
-    "ui/screens"
     "core"
     "drivers"
+    "ui"
+    "ui/screens"
     "utils"
 )
 
-register_component()
+# Register component with required ESP-IDF components
+idf_component_register(
+    SRCS ${COMPONENT_SRCS}
+    INCLUDE_DIRS ${COMPONENT_ADD_INCLUDEDIRS}
+    REQUIRES driver esp_lcd esp_timer esp_wifi esp_event nvs_flash esp_pm esp_adc esp_bt esp_system freertos lvgl
+)
+
+# Configure PSRAM
+target_compile_definitions(${COMPONENT_LIB} PUBLIC
+    -DCONFIG_SPIRAM_SUPPORT
+    -DCONFIG_SPIRAM_SPEED_80M
+)
+
+# Configure compiler warnings
+target_compile_options(${COMPONENT_LIB} PRIVATE 
+    -Wall
+    -Wextra
+    -Werror
+    -Wno-unused-parameter
+)
+
+# Configure LVGL
+target_compile_definitions(${COMPONENT_LIB} PUBLIC
+    -DLV_CONF_INCLUDE_SIMPLE
+    -DLV_CONF_PATH="${CMAKE_CURRENT_SOURCE_DIR}/ui/lv_conf.h"
+)
+
+# Configure optimization flags for release builds
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_options(${COMPONENT_LIB} PRIVATE -O2)
+endif()
