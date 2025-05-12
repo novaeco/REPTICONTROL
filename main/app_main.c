@@ -1,3 +1,4 @@
+```c
 #include "app_main.h"
 #include "drivers/display_driver.h"
 #include "drivers/touch_driver.h"
@@ -7,6 +8,7 @@
 #include "core/event_logger.h"
 #include "core/system_monitor.h"
 #include "core/settings_manager.h"
+#include "core/power_manager.h"
 #include "utils/rtc_manager.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -19,6 +21,7 @@ static void ui_task(void *pvParameter);
 static void sensor_simulator_task(void *pvParameter);
 static void climate_control_task(void *pvParameter);
 static void system_monitor_task(void *pvParameter);
+static void power_management_task(void *pvParameter);
 
 // Initialization and main entry point
 void repticontrol_main(void) {
@@ -33,6 +36,7 @@ void repticontrol_main(void) {
     climate_controller_init();
     data_simulator_init();
     system_monitor_init();
+    power_manager_init();
     
     // Initialize the UI (with splash screen)
     ui_init();
@@ -42,6 +46,7 @@ void repticontrol_main(void) {
     xTaskCreate(sensor_simulator_task, "simulator_task", 2048, NULL, 3, NULL);
     xTaskCreate(climate_control_task, "climate_task", 2048, NULL, 4, NULL);
     xTaskCreate(system_monitor_task, "monitor_task", 2048, NULL, 2, NULL);
+    xTaskCreate(power_management_task, "power_task", 2048, NULL, 2, NULL);
     
     ESP_LOGI(TAG, "ReptiControl started successfully");
 }
@@ -97,3 +102,17 @@ static void system_monitor_task(void *pvParameter) {
         vTaskDelay(pdMS_TO_TICKS(2000));
     }
 }
+
+// Power management task
+static void power_management_task(void *pvParameter) {
+    ESP_LOGI(TAG, "Power management task started");
+    
+    while (1) {
+        // Update power management status
+        power_manager_update();
+        
+        // Delay between updates (1 second)
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+```
