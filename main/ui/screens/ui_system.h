@@ -1,3 +1,4 @@
+```c
 #ifndef UI_SYSTEM_H
 #define UI_SYSTEM_H
 
@@ -14,6 +15,12 @@ void ui_system_update_status(int battery_level, bool heating_on, bool cooling_on
 // Update memory and CPU usage stats
 void ui_system_update_stats(int cpu_usage, int memory_usage);
 
+// Update OTA progress
+void ui_system_update_ota_progress(int progress, const char* status);
+
+// Show OTA error
+void ui_system_show_ota_error(const char* error);
+
 // Simulate system reboot
 void ui_system_reboot(void);
 
@@ -21,3 +28,4 @@ void ui_system_reboot(void);
 void ui_system_shutdown(void);
 
 #endif /* UI_SYSTEM_H */
+```
