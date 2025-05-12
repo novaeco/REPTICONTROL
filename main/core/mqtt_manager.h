@@ -1,3 +1,4 @@
+```c
 #ifndef MQTT_MANAGER_H
 #define MQTT_MANAGER_H
 
@@ -15,6 +16,10 @@
 #define MQTT_TOPIC_BATTERY     "repticontrol/status/battery"
 #define MQTT_TOPIC_ALERTS      "repticontrol/alerts"
 #define MQTT_TOPIC_COMMANDS    "repticontrol/commands"
+#define MQTT_TOPIC_STATUS      "repticontrol/status"
+
+// Home Assistant discovery prefix
+#define HA_DISCOVERY_PREFIX    "homeassistant"
 
 // Initialize MQTT manager
 esp_err_t mqtt_manager_init(void);
@@ -40,4 +45,8 @@ esp_err_t mqtt_manager_publish_alert(const char* message, bool is_critical);
 // Check connection status
 bool mqtt_manager_is_connected(void);
 
+// Configure Home Assistant auto-discovery
+esp_err_t mqtt_manager_configure_ha_discovery(void);
+
 #endif /* MQTT_MANAGER_H */
+```
