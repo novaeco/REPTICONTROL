@@ -16,6 +16,8 @@ lv_style_t style_header;
 lv_style_t style_text_muted;
 lv_style_t style_badge;
 lv_style_t style_card_dark;
+lv_style_t style_nav_item;
+lv_style_t style_nav_item_active;
 
 // Initialize all common styles
 void init_styles(void) {
@@ -113,6 +115,21 @@ void init_styles(void) {
     lv_style_set_text_color(&style_badge, COLOR_SURFACE);
     lv_style_set_pad_hor(&style_badge, GRID_UNIT);
     lv_style_set_pad_ver(&style_badge, GRID_UNIT / 2);
+
+    // Initialize navigation styles
+    lv_style_init(&style_nav_item);
+    lv_style_set_bg_opa(&style_nav_item, LV_OPA_TRANSP);
+    lv_style_set_text_color(&style_nav_item, lv_color_hex(0xFFFFFF));
+    lv_style_set_text_font(&style_nav_item, &lv_font_montserrat_14);
+    lv_style_set_pad_all(&style_nav_item, GRID_UNIT);
+    lv_style_set_transition_time(&style_nav_item, TRANSITION_TIME);
+    lv_style_set_transition_prop_1(&style_nav_item, LV_STYLE_BG_COLOR);
+    lv_style_set_transition_prop_2(&style_nav_item, LV_STYLE_TEXT_COLOR);
+
+    lv_style_init(&style_nav_item_active);
+    lv_style_set_bg_color(&style_nav_item_active, COLOR_PRIMARY_DARK);
+    lv_style_set_bg_opa(&style_nav_item_active, LV_OPA_COVER);
+    lv_style_set_text_color(&style_nav_item_active, COLOR_SURFACE);
 }
 
 // Create a card container with title
@@ -256,4 +273,48 @@ void add_ripple_effect(lv_obj_t *obj) {
     }
     
     lv_obj_add_style(obj, &style_ripple, LV_STATE_PRESSED);
+}
+
+// Create a navigation item
+lv_obj_t *create_nav_item(lv_obj_t *parent, const char *icon, const char *text, 
+                         bool active, lv_event_cb_t event_cb) {
+    // Create container
+    lv_obj_t *item = lv_obj_create(parent);
+    lv_obj_set_size(item, TOUCH_TARGET_MIN * 2, NAV_BAR_HEIGHT);
+    lv_obj_add_style(item, &style_nav_item, 0);
+    lv_obj_add_flag(item, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_clear_flag(item, LV_OBJ_FLAG_SCROLLABLE);
+    
+    if (active) {
+        lv_obj_add_state(item, LV_STATE_CHECKED);
+        lv_obj_add_style(item, &style_nav_item_active, LV_STATE_CHECKED);
+    }
+    
+    // Create layout for icon and text
+    lv_obj_t *layout = lv_obj_create(item);
+    lv_obj_set_size(layout, LV_PCT(100), LV_PCT(100));
+    lv_obj_set_style_bg_opa(layout, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(layout, 0, 0);
+    lv_obj_set_flex_flow(layout, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(layout, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    
+    // Add icon
+    lv_obj_t *icon_label = lv_label_create(layout);
+    lv_label_set_text(icon_label, icon);
+    lv_obj_set_style_text_font(icon_label, &lv_font_montserrat_24, 0);
+    
+    // Add text
+    lv_obj_t *text_label = lv_label_create(layout);
+    lv_label_set_text(text_label, text);
+    lv_obj_set_style_text_font(text_label, &lv_font_montserrat_12, 0);
+    
+    // Add event handler
+    if (event_cb) {
+        lv_obj_add_event_cb(item, event_cb, LV_EVENT_CLICKED, NULL);
+    }
+    
+    // Add ripple effect
+    add_ripple_effect(item);
+    
+    return item;
 }

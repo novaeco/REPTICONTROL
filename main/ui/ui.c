@@ -140,68 +140,53 @@ void ui_show_alert(const char* title, const char* message) {
 // Create the navigation bar at the bottom of the screen
 static void create_navigation_bar(void) {
     nav_bar = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(nav_bar, LV_HOR_RES, 64);
+    lv_obj_set_size(nav_bar, LV_HOR_RES, NAV_BAR_HEIGHT);
     lv_obj_align(nav_bar, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_flex_flow(nav_bar, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(nav_bar, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_set_style_bg_color(nav_bar, lv_color_hex(0x2E7D32), 0); // Forest green
+    lv_obj_set_style_bg_color(nav_bar, COLOR_PRIMARY, 0);
     lv_obj_set_style_radius(nav_bar, 0, 0);
     lv_obj_clear_flag(nav_bar, LV_OBJ_FLAG_SCROLLABLE);
     
-    // Fixed names and symbols for nav buttons
-    static const char *symbols[SCREEN_COUNT] = {
-        LV_SYMBOL_HOME,       // Dashboard
-        LV_SYMBOL_SETTINGS,   // Climate
-        LV_SYMBOL_CALENDAR,   // Schedule
-        LV_SYMBOL_WARNING,    // System
-        LV_SYMBOL_LIST        // Logs
+    // Navigation items configuration
+    static const struct {
+        const char *icon;
+        const char *text;
+    } nav_items[SCREEN_COUNT] = {
+        {LV_SYMBOL_HOME, "Home"},
+        {LV_SYMBOL_SETTINGS, "Climate"},
+        {LV_SYMBOL_CALENDAR, "Schedule"},
+        {LV_SYMBOL_WARNING, "System"},
+        {LV_SYMBOL_LIST, "Logs"}
     };
     
-    static const char *names[SCREEN_COUNT] = {
-        "Home", "Climate", "Schedule", "System", "Logs"
-    };
-    
-    // Create navigation buttons
+    // Create navigation items
     for (int i = 0; i < SCREEN_COUNT; i++) {
-        nav_buttons[i] = lv_btn_create(nav_bar);
-        lv_obj_set_size(nav_buttons[i], 70, 48);
-        lv_obj_add_flag(nav_buttons[i], LV_OBJ_FLAG_CHECKABLE);
-        lv_obj_set_style_bg_color(nav_buttons[i], lv_color_hex(0x2E7D32), 0); // Normal state
-        lv_obj_set_style_bg_color(nav_buttons[i], lv_color_hex(0x1B5E20), LV_STATE_CHECKED); // Active state
-        lv_obj_clear_flag(nav_buttons[i], LV_OBJ_FLAG_SCROLLABLE);
+        nav_buttons[i] = create_nav_item(nav_bar, 
+                                       nav_items[i].icon,
+                                       nav_items[i].text,
+                                       i == 0,  // First item active
+                                       nav_button_event_cb);
         
-        // Create a layout for icon and text
-        lv_obj_t *col = lv_obj_create(nav_buttons[i]);
-        lv_obj_set_size(col, LV_PCT(100), LV_PCT(100));
-        lv_obj_set_flex_flow(col, LV_FLEX_FLOW_COLUMN);
-        lv_obj_set_flex_align(col, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-        lv_obj_clear_flag(col, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_set_style_bg_opa(col, LV_OPA_TRANSP, 0);
-        lv_obj_set_style_border_width(col, 0, 0);
-        
-        // Icon
-        lv_obj_t *icon = lv_label_create(col);
-        lv_label_set_text(icon, symbols[i]);
-        lv_obj_set_style_text_color(icon, lv_color_white(), 0);
-        
-        // Text
-        lv_obj_t *text = lv_label_create(col);
-        lv_label_set_text(text, names[i]);
-        lv_obj_set_style_text_color(text, lv_color_white(), 0);
-        lv_obj_set_style_text_font(text, &lv_font_montserrat_12, 0);
-        
-        // Set up button click event
-        lv_obj_add_event_cb(nav_buttons[i], nav_button_event_cb, LV_EVENT_CLICKED, (void*)i);
-        
-        // Set initial state for first button
-        if (i == 0) {
-            lv_obj_add_state(nav_buttons[i], LV_STATE_CHECKED);
-        }
+        // Store index for event handling
+        lv_obj_set_user_data(nav_buttons[i], (void*)(intptr_t)i);
     }
 }
 
 // Handle navigation button clicks
 static void nav_button_event_cb(lv_event_t *e) {
-    int btn_idx = (int)lv_event_get_user_data(e);
+    lv_obj_t *btn = lv_event_get_target(e);
+    int btn_idx = (int)(intptr_t)lv_obj_get_user_data(btn);
+    
+    // Update active states
+    for (int i = 0; i < SCREEN_COUNT; i++) {
+        if (i == btn_idx) {
+            lv_obj_add_state(nav_buttons[i], LV_STATE_CHECKED);
+        } else {
+            lv_obj_clear_state(nav_buttons[i], LV_STATE_CHECKED);
+        }
+    }
+    
+    // Switch screen with animation
     ui_switch_screen((screen_t)btn_idx);
 }
