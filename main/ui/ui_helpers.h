@@ -16,6 +16,8 @@ extern lv_style_t style_header;
 extern lv_style_t style_text_muted;
 extern lv_style_t style_badge;
 extern lv_style_t style_card_dark;
+extern lv_style_t style_nav_item;
+extern lv_style_t style_nav_item_active;
 
 // ReptiControl Design System Colors
 #define COLOR_PRIMARY        lv_color_hex(0x2E7D32)  // Forest green
@@ -40,6 +42,7 @@ extern lv_style_t style_card_dark;
 #define TOUCH_TARGET_MIN    48  // Minimum touch target size
 #define BORDER_RADIUS       (GRID_UNIT)  // 8px
 #define TRANSITION_TIME     300  // Animation duration in ms
+#define NAV_BAR_HEIGHT     (TOUCH_TARGET_MIN * 1.5)  // Navigation bar height
 
 // Initialize all styles
 void init_styles(void);
@@ -61,6 +64,10 @@ lv_obj_t *create_toggle(lv_obj_t *parent, const char *title, bool state,
 
 // Create a badge indicator
 lv_obj_t *create_badge(lv_obj_t *parent, const char *text, lv_color_t color);
+
+// Create a navigation item
+lv_obj_t *create_nav_item(lv_obj_t *parent, const char *icon, const char *text, 
+                         bool active, lv_event_cb_t event_cb);
 
 // Create a ripple animation on object
 void add_ripple_effect(lv_obj_t *obj);
