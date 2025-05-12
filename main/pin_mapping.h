@@ -1,46 +1,32 @@
-/**
- * @file pin_mapping.h
- * @brief Pin mapping configuration for ReptiControl hardware
- *
- * This file defines all GPIO assignments for the Waveshare ESP32-S3-Touch-LCD-5B
- * hardware platform. All pin definitions should be centralized here.
- */
-
 #ifndef PIN_MAPPING_H
 #define PIN_MAPPING_H
 
 // LCD Interface
-#define LCD_RESET_PIN       4
-#define LCD_CS_PIN         5
-#define LCD_DC_PIN         6
-#define LCD_WR_PIN         7
-#define LCD_RD_PIN         8
-
-// RGB Interface
-#define LCD_VSYNC_PIN      9
-#define LCD_HSYNC_PIN      10
-#define LCD_DE_PIN         11
-#define LCD_PCLK_PIN       12
+#define LCD_DISP_EN_GPIO   4
+#define LCD_PCLK_GPIO      5
+#define LCD_VSYNC_GPIO     6
+#define LCD_HSYNC_GPIO     7
+#define LCD_DE_GPIO        8
 
 // RGB Data Bus
-#define LCD_B0_PIN         13
-#define LCD_B1_PIN         14
-#define LCD_B2_PIN         15
-#define LCD_B3_PIN         16
-#define LCD_B4_PIN         17
-#define LCD_G0_PIN         18
-#define LCD_G1_PIN         19
-#define LCD_G2_PIN         20
-#define LCD_G3_PIN         21
-#define LCD_G4_PIN         22
-#define LCD_G5_PIN         23
-#define LCD_R0_PIN         24
-#define LCD_R1_PIN         25
-#define LCD_R2_PIN         26
-#define LCD_R3_PIN         27
-#define LCD_R4_PIN         28
+#define LCD_D0_GPIO        9
+#define LCD_D1_GPIO        10
+#define LCD_D2_GPIO        11
+#define LCD_D3_GPIO        12
+#define LCD_D4_GPIO        13
+#define LCD_D5_GPIO        14
+#define LCD_D6_GPIO        15
+#define LCD_D7_GPIO        16
+#define LCD_D8_GPIO        17
+#define LCD_D9_GPIO        18
+#define LCD_D10_GPIO       19
+#define LCD_D11_GPIO       20
+#define LCD_D12_GPIO       21
+#define LCD_D13_GPIO       22
+#define LCD_D14_GPIO       23
+#define LCD_D15_GPIO       24
 
-// Touch Panel Interface
+// Touch Panel Interface (FT5x06)
 #define TOUCH_I2C_SCL      41
 #define TOUCH_I2C_SDA      42
 #define TOUCH_IRQ_PIN      40
@@ -57,16 +43,19 @@
 #define LED_ERROR          37  // Error indicator LED
 
 // Communication Interfaces
-#define UART_TX_PIN       43   // UART TX for RS-485
-#define UART_RX_PIN       44   // UART RX for RS-485
-#define RS485_DE_PIN      45   // RS-485 Driver Enable
-#define RS485_RE_PIN      46   // RS-485 Receiver Enable
+#define UART_TX_PIN        43  // UART TX for RS-485
+#define UART_RX_PIN        44  // UART RX for RS-485
+#define RS485_DE_PIN       45  // RS-485 Driver Enable
+#define RS485_RE_PIN       46  // RS-485 Receiver Enable
 
-#define CAN_TX_PIN        47   // CAN TX
-#define CAN_RX_PIN        48   // CAN RX
+#define CAN_TX_PIN         47  // CAN TX
+#define CAN_RX_PIN         48  // CAN RX
 
 // I2C Sensors
-#define SENSOR_I2C_SCL    33   // I2C Clock for sensors
-#define SENSOR_I2C_SDA    34   // I2C Data for sensors
+#define SENSOR_I2C_SCL     33  // I2C Clock for sensors
+#define SENSOR_I2C_SDA     34  // I2C Data for sensors
+
+// LCD Backlight Control
+#define LCD_BK_LIGHT_GPIO  25  // Backlight control pin
 
 #endif /* PIN_MAPPING_H */
