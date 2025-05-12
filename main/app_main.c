@@ -1,4 +1,3 @@
-```c
 #include "app_main.h"
 #include "drivers/display_driver.h"
 #include "drivers/touch_driver.h"
@@ -9,6 +8,7 @@
 #include "core/system_monitor.h"
 #include "core/settings_manager.h"
 #include "core/power_manager.h"
+#include "core/network_manager.h"
 #include "utils/rtc_manager.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -22,6 +22,7 @@ static void sensor_simulator_task(void *pvParameter);
 static void climate_control_task(void *pvParameter);
 static void system_monitor_task(void *pvParameter);
 static void power_management_task(void *pvParameter);
+static void network_task(void *pvParameter);
 
 // Initialization and main entry point
 void repticontrol_main(void) {
@@ -37,6 +38,7 @@ void repticontrol_main(void) {
     data_simulator_init();
     system_monitor_init();
     power_manager_init();
+    network_manager_init();
     
     // Initialize the UI (with splash screen)
     ui_init();
@@ -47,6 +49,7 @@ void repticontrol_main(void) {
     xTaskCreate(climate_control_task, "climate_task", 2048, NULL, 4, NULL);
     xTaskCreate(system_monitor_task, "monitor_task", 2048, NULL, 2, NULL);
     xTaskCreate(power_management_task, "power_task", 2048, NULL, 2, NULL);
+    xTaskCreate(network_task, "network_task", 4096, NULL, 1, NULL);
     
     ESP_LOGI(TAG, "ReptiControl started successfully");
 }
@@ -71,6 +74,13 @@ static void sensor_simulator_task(void *pvParameter) {
     while (1) {
         // Update simulated sensor readings
         data_simulator_update();
+        
+        // Update BLE characteristics with new sensor values
+        network_manager_ble_update_sensors(
+            data_simulator_get_temperature(),
+            data_simulator_get_humidity(),
+            data_simulator_get_light()
+        );
         
         // Delay between updates (1 second)
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -115,4 +125,23 @@ static void power_management_task(void *pvParameter) {
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
-```
+
+// Network management task
+static void network_task(void *pvParameter) {
+    ESP_LOGI(TAG, "Network task started");
+    
+    // Configure Wi-Fi in AP mode by default
+    wifi_config_t wifi_config = {
+        .mode = WIFI_MODE_AP,
+        .ssid = "ReptiControl",
+        .password = "repticontrol123"
+    };
+    
+    network_manager_wifi_start(&wifi_config);
+    network_manager_ble_start();
+    
+    while (1) {
+        // Network management loop
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
