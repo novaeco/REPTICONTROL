@@ -9,6 +9,7 @@
 #include "core/settings_manager.h"
 #include "core/power_manager.h"
 #include "core/network_manager.h"
+#include "core/watchdog_manager.h"
 #include "utils/rtc_manager.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -39,9 +40,18 @@ void repticontrol_main(void) {
     system_monitor_init();
     power_manager_init();
     network_manager_init();
+    watchdog_manager_init();
     
     // Initialize the UI (with splash screen)
     ui_init();
+    
+    // Register tasks with watchdog
+    watchdog_manager_register_task("ui_task", 2000);
+    watchdog_manager_register_task("simulator_task", 3000);
+    watchdog_manager_register_task("climate_task", 2000);
+    watchdog_manager_register_task("monitor_task", 4000);
+    watchdog_manager_register_task("power_task", 3000);
+    watchdog_manager_register_task("network_task", 5000);
     
     // Create tasks
     xTaskCreatePinnedToCore(ui_task, "ui_task", 4096, NULL, 5, NULL, 1);
@@ -61,6 +71,9 @@ static void ui_task(void *pvParameter) {
     while (1) {
         // Process UI events
         ui_update();
+        
+        // Feed watchdog
+        watchdog_manager_feed("ui_task");
         
         // Short delay to prevent CPU hogging
         vTaskDelay(pdMS_TO_TICKS(10));
@@ -82,6 +95,9 @@ static void sensor_simulator_task(void *pvParameter) {
             data_simulator_get_light()
         );
         
+        // Feed watchdog
+        watchdog_manager_feed("simulator_task");
+        
         // Delay between updates (1 second)
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
@@ -94,6 +110,9 @@ static void climate_control_task(void *pvParameter) {
     while (1) {
         // Update climate controls based on current settings and schedule
         climate_controller_update();
+        
+        // Feed watchdog
+        watchdog_manager_feed("climate_task");
         
         // Delay between control updates (500ms)
         vTaskDelay(pdMS_TO_TICKS(500));
@@ -108,6 +127,9 @@ static void system_monitor_task(void *pvParameter) {
         // Update system status (battery, memory, etc.)
         system_monitor_update();
         
+        // Feed watchdog
+        watchdog_manager_feed("monitor_task");
+        
         // Delay between system updates (2 seconds)
         vTaskDelay(pdMS_TO_TICKS(2000));
     }
@@ -120,6 +142,9 @@ static void power_management_task(void *pvParameter) {
     while (1) {
         // Update power management status
         power_manager_update();
+        
+        // Feed watchdog
+        watchdog_manager_feed("power_task");
         
         // Delay between updates (1 second)
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -141,6 +166,9 @@ static void network_task(void *pvParameter) {
     network_manager_ble_start();
     
     while (1) {
+        // Feed watchdog
+        watchdog_manager_feed("network_task");
+        
         // Network management loop
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
