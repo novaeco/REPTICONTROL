@@ -1,0 +1,21 @@
+{
+  "name": "repticontrol",
+  "version": "1.0.0",
+  "description": "ReptiControl - ESP32 Terrarium Controller",
+  "private": true,
+  "scripts": {
+    "dev": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "esp32",
+    "terrarium",
+    "controller",
+    "iot"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
