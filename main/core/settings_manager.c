@@ -128,3 +128,9 @@ void settings_set_int(const char* key, int value) {
         ESP_LOGE(TAG, "Error setting int for %s: %s", key, esp_err_to_name(err));
     }
 }
+
+bool settings_has_key(const char* key) {
+    int32_t dummy;
+    esp_err_t err = nvs_get_i32(settings_handle, key, &dummy);
+    return err != ESP_ERR_NVS_NOT_FOUND;
+}

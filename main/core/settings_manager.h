@@ -39,4 +39,12 @@ int settings_get_int(const char* key, int default_value);
 // Set integer value
 void settings_set_int(const char* key, int value);
 
+// Check if a key exists in NVS
+bool settings_has_key(const char* key);
+
+// Helper to check if display_type stored
+static inline bool settings_has_display_type(void) {
+    return settings_has_key("display_type");
+}
+
 #endif /* SETTINGS_MANAGER_H */

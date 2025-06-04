@@ -11,14 +11,18 @@ ReptiControl is an embedded climate control system designed for the Waveshare ES
 - Event logging and data visualization
 - Battery management and power optimization
 - Intuitive 5" touchscreen interface
+- First-run wizard to choose screen size and connect to Wi-Fi
 
 ## Hardware Requirements
-- Waveshare ESP32-S3-Touch-LCD-5B
+- Waveshare ESP32-S3-Touch-LCD-5B or ESP32-S3-Touch-LCD-7
 - ESP32-S3 with 8MB PSRAM
-- 5" 1024x600 IPS LCD Display
+- 5" 1024x600 or 7" 800x480 IPS LCD Display
 - Capacitive touch panel (5-point)
 - Built-in RTC
 - Battery management system
+
+On first boot, ReptiControl lets you choose between the 5" and 7" display and
+enter Wi-Fi credentials using the French virtual keyboard.
 
 ## Software Requirements
 - ESP-IDF v5.0.1 or later
