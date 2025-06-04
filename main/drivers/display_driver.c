@@ -86,6 +86,14 @@ esp_err_t display_init(void) {
         panel_config.timings.vsync_back_porch = 20;
         panel_config.timings.vsync_front_porch = 12;
     }
+
+    panel_config.timings.hsync_pulse_width = 20;
+    panel_config.timings.hsync_back_porch = 140;
+    panel_config.timings.hsync_front_porch = 160;
+    panel_config.timings.vsync_pulse_width = 3;
+    panel_config.timings.vsync_back_porch = 20;
+    panel_config.timings.vsync_front_porch = 12;
+ main
     panel_config.timings.flags.pclk_active_neg = 1;
     panel_config.flags.fb_in_psram = 1;
     panel_config.flags.refresh_on_demand = 0;
