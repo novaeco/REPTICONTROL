@@ -39,9 +39,9 @@ repticontrol/
 │   ├── ui/            # User interface
 │   │   └── screens/   # Screen implementations
 │   └── utils/         # Utility functions
-├── components/         # External components
 └── test/              # Unit tests
 ```
+External components are retrieved using the IDF component manager.
 
 ## Architecture
 The application follows a layered architecture:
@@ -65,13 +65,24 @@ idf.py menuconfig
 # Configure partition table
 ```
 
-3. Fetch Bluetooth component:
-```bash
+
+3. Fetch required components:
+bash
 idf.py add-dependency espressif/bt
-```
+idf.py add-dependency lvgl/lvgl
+# The following components are included with ESP-IDF:
+# - mqtt
+# - esp_https_ota
+# - cjson
+
+3. Fetch Bluetooth component:
+bash
+idf.py add-dependency espressif/bt
+ main
+
 
 4. Build the project:
-```bash
+bash
 idf.py build
 ```
 

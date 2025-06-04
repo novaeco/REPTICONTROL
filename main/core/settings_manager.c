@@ -7,6 +7,24 @@
 
 static const char *TAG = "settings_manager";
 
+// Helper functions to store floats using 32-bit integers
+static esp_err_t nvs_get_float_compat(nvs_handle_t h, const char *key, float *out)
+{
+    uint32_t tmp;
+    esp_err_t err = nvs_get_u32(h, key, &tmp);
+    if (err == ESP_OK) {
+        memcpy(out, &tmp, sizeof(float));
+    }
+    return err;
+}
+
+static esp_err_t nvs_set_float_compat(nvs_handle_t h, const char *key, float value)
+{
+    uint32_t tmp;
+    memcpy(&tmp, &value, sizeof(float));
+    return nvs_set_u32(h, key, tmp);
+}
+
 // NVS handle
 static nvs_handle_t settings_handle;
 
@@ -52,30 +70,15 @@ void settings_save(void) {
 // Get float value
 float settings_get_float(const char* key, float default_value) {
     float value = default_value;
-
-    // First try to read as float (newer entries)
-    esp_err_t err = nvs_get_float(settings_handle, key, &value);
-
-    if (err == ESP_ERR_NVS_NOT_FOUND) {
-        // If not found, try legacy format (int32 with fixed point)
-        int32_t int_value;
-        err = nvs_get_i32(settings_handle, key, &int_value);
-        if (err == ESP_OK) {
-            // Convert from fixed point (2 decimal places)
-            value = (float)int_value / 100.0f;
-        } else {
-            // Use default value
-            value = default_value;
-        }
+    if (nvs_get_float_compat(settings_handle, key, &value) != ESP_OK) {
+        value = default_value;
     }
-
     return value;
 }
 
 // Set float value
 void settings_set_float(const char* key, float value) {
-    esp_err_t err = nvs_set_float(settings_handle, key, value);
-
+    esp_err_t err = nvs_set_float_compat(settings_handle, key, value);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "Error setting float for %s: %s", key, esp_err_to_name(err));
     }

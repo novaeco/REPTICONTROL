@@ -47,7 +47,11 @@ esp_err_t power_manager_init(void) {
 
     // Initialize ADC calibration
     adc_cali_handle_t handle = NULL;
-    esp_err_t ret = adc_cali_create_scheme_curve_fitting(&handle);
+    adc_cali_curve_fitting_config_t cfg = {
+        .unit_id = ADC_UNIT_1,
+        .atten = ADC_ATTEN_DB_11,
+    };
+    esp_err_t ret = adc_cali_create_scheme_curve_fitting(&cfg, &handle);
     if (ret == ESP_OK) {
         adc1_cali_handle = handle;
     }

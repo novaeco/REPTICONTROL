@@ -25,7 +25,11 @@ set(COMPONENT_ADD_INCLUDEDIRS
 idf_component_register(
     SRCS ${COMPONENT_SRCS}
     INCLUDE_DIRS ${COMPONENT_ADD_INCLUDEDIRS}
+
+    REQUIRES driver esp_lcd esp_timer esp_wifi esp_event nvs_flash esp_pm esp_adc bt esp_system freertos lvgl mqtt esp_https_ota cjson
+
     REQUIRES driver esp_lcd esp_timer esp_wifi esp_event nvs_flash esp_pm esp_adc bt esp_system freertos lvgl
+ main
 )
 
 # Configure PSRAM
@@ -45,7 +49,7 @@ target_compile_options(${COMPONENT_LIB} PRIVATE
 # Configure LVGL
 target_compile_definitions(${COMPONENT_LIB} PUBLIC
     -DLV_CONF_INCLUDE_SIMPLE
-    -DLV_CONF_PATH="${CMAKE_CURRENT_SOURCE_DIR}/ui/lv_conf.h"
+    -DLV_CONF_PATH=${CMAKE_CURRENT_SOURCE_DIR}/ui/lv_conf.h
 )
 
 # Configure optimization flags for release builds

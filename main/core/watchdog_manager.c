@@ -4,6 +4,7 @@
 #include "esp_log.h"
 #include "event_logger.h"
 #include <string.h>
+#include <inttypes.h>
 
 static const char *TAG = "watchdog_manager";
 
@@ -34,7 +35,11 @@ esp_err_t watchdog_manager_init(void) {
     ESP_LOGI(TAG, "Initializing watchdog manager");
 
     // Initialize task watchdog
-    ESP_ERROR_CHECK(esp_task_wdt_init(5, true));
+    const esp_task_wdt_config_t cfg = {
+        .timeout_ms = 5000,
+        .trigger_panic = true,
+    };
+    ESP_ERROR_CHECK(esp_task_wdt_init(&cfg));
 
     // Create periodic timer for watchdog checks
     const esp_timer_create_args_t timer_args = {
@@ -77,7 +82,7 @@ esp_err_t watchdog_manager_register_task(const char* task_name, uint32_t timeout
 
     task_count++;
 
-    ESP_LOGI(TAG, "Registered task %s with timeout %d ms", task_name, timeout_ms);
+    ESP_LOGI(TAG, "Registered task %s with timeout %" PRIu32 " ms", task_name, timeout_ms);
     return ESP_OK;
 }
 

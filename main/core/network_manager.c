@@ -94,15 +94,6 @@ esp_err_t network_manager_wifi_start(rc_wifi_config_t *config) {
             break;
             
         case RC_WIFI_MODE_APSTA:
-
-
-        case WIFI_MODE_STA:
-            ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-            ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
-            break;
-
-        case WIFI_MODE_APSTA:
-
             ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
             ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
             break;
