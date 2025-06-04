@@ -1,5 +1,6 @@
 #include "display_driver.h"
 #include "pin_mapping.h"
+#include "display_config.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_rgb.h"
 #include "esp_lcd_panel_ops.h"
@@ -10,6 +11,7 @@
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "esp_heap_caps.h"
+#include <string.h>
 #include "lvgl.h"
 
 static const char *TAG = "display_driver";
@@ -26,41 +28,7 @@ static lv_color_t *buf2 = NULL;
 static lv_disp_draw_buf_t disp_buf;
 
 // Display configuration
-static esp_lcd_rgb_panel_config_t panel_config = {
-    .data_width = 16,
-    .psram_trans_align = 64,
-    .clk_src = LCD_CLK_SRC_PLL160M,
-    .disp_gpio_num = LCD_DISP_EN_GPIO,
-    .pclk_gpio_num = LCD_PCLK_GPIO,
-    .vsync_gpio_num = LCD_VSYNC_GPIO,
-    .hsync_gpio_num = LCD_HSYNC_GPIO,
-    .de_gpio_num = LCD_DE_GPIO,
-    .data_gpio_nums = {
-        LCD_D0_GPIO, LCD_D1_GPIO, LCD_D2_GPIO, LCD_D3_GPIO,
-        LCD_D4_GPIO, LCD_D5_GPIO, LCD_D6_GPIO, LCD_D7_GPIO,
-        LCD_D8_GPIO, LCD_D9_GPIO, LCD_D10_GPIO, LCD_D11_GPIO,
-        LCD_D12_GPIO, LCD_D13_GPIO, LCD_D14_GPIO, LCD_D15_GPIO,
-    },
-    .timings = {
-        .pclk_hz = LCD_PIXEL_CLOCK_HZ,
-        .h_res = LCD_H_RES,
-        .v_res = LCD_V_RES,
-        .hsync_pulse_width = 20,
-        .hsync_back_porch = 140,
-        .hsync_front_porch = 160,
-        .vsync_pulse_width = 3,
-        .vsync_back_porch = 20,
-        .vsync_front_porch = 12,
-        .flags = {
-            .pclk_active_neg = 1,
-        },
-    },
-    .flags = {
-        .fb_in_psram = 1,
-        .refresh_on_demand = 0,
-        .bb_invalidate_cache = 1,
-    },
-};
+static esp_lcd_rgb_panel_config_t panel_config;
 
 esp_err_t display_init(void) {
     ESP_LOGI(TAG, "Initializing display driver");
@@ -81,6 +49,35 @@ esp_err_t display_init(void) {
         ESP_LOGE(TAG, "Failed to allocate frame buffers");
         return ESP_FAIL;
     }
+
+    // Configure panel parameters based on selected display
+    memset(&panel_config, 0, sizeof(panel_config));
+    panel_config.data_width = 16;
+    panel_config.psram_trans_align = 64;
+    panel_config.clk_src = LCD_CLK_SRC_PLL160M;
+    panel_config.disp_gpio_num = LCD_DISP_EN_GPIO;
+    panel_config.pclk_gpio_num = LCD_PCLK_GPIO;
+    panel_config.vsync_gpio_num = LCD_VSYNC_GPIO;
+    panel_config.hsync_gpio_num = LCD_HSYNC_GPIO;
+    panel_config.de_gpio_num = LCD_DE_GPIO;
+    int data_pins[] = { LCD_D0_GPIO, LCD_D1_GPIO, LCD_D2_GPIO, LCD_D3_GPIO,
+                        LCD_D4_GPIO, LCD_D5_GPIO, LCD_D6_GPIO, LCD_D7_GPIO,
+                        LCD_D8_GPIO, LCD_D9_GPIO, LCD_D10_GPIO, LCD_D11_GPIO,
+                        LCD_D12_GPIO, LCD_D13_GPIO, LCD_D14_GPIO, LCD_D15_GPIO };
+    memcpy(panel_config.data_gpio_nums, data_pins, sizeof(data_pins));
+    panel_config.timings.pclk_hz = LCD_PIXEL_CLOCK_HZ;
+    panel_config.timings.h_res = LCD_H_RES;
+    panel_config.timings.v_res = LCD_V_RES;
+    panel_config.timings.hsync_pulse_width = 20;
+    panel_config.timings.hsync_back_porch = 140;
+    panel_config.timings.hsync_front_porch = 160;
+    panel_config.timings.vsync_pulse_width = 3;
+    panel_config.timings.vsync_back_porch = 20;
+    panel_config.timings.vsync_front_porch = 12;
+    panel_config.timings.flags.pclk_active_neg = 1;
+    panel_config.flags.fb_in_psram = 1;
+    panel_config.flags.refresh_on_demand = 0;
+    panel_config.flags.bb_invalidate_cache = 1;
 
     // Initialize RGB LCD panel
     ESP_ERROR_CHECK(esp_lcd_new_rgb_panel(&panel_config, &panel_handle));

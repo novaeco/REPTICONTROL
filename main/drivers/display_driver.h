@@ -4,10 +4,10 @@
 #include "esp_err.h"
 #include "lvgl.h"
 
-// Display specifications
-#define LCD_H_RES 1024
-#define LCD_V_RES 600
-#define LCD_PIXEL_CLOCK_HZ (18 * 1000 * 1000)
+// Display specifications (set by display_config)
+extern int LCD_H_RES;
+extern int LCD_V_RES;
+extern int LCD_PIXEL_CLOCK_HZ;
 #define LCD_BITS_PER_PIXEL 16
 
 // Backlight control
