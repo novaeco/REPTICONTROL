@@ -80,4 +80,12 @@ bool network_manager_load_wifi_credentials(char *ssid, size_t ssid_len,
                                            char *password, size_t pass_len,
                                            wifi_mode_t *mode);
 
+
 #endif /* CORE_NETWORK_MANAGER_H */
+
+
+#endif /* CORE_NETWORK_MANAGER_H */
+
+#endif /* CORE_NETWORK_MANAGER_H */
+ main
+ main

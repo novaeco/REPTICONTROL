@@ -133,4 +133,11 @@ bool settings_has_key(const char* key) {
     int32_t dummy;
     esp_err_t err = nvs_get_i32(settings_handle, key, &dummy);
     return err != ESP_ERR_NVS_NOT_FOUND;
+
 }
+
+
+}
+
+}
+
