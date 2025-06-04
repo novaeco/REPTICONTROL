@@ -1,4 +1,3 @@
-```c
 #include "ota_manager.h"
 #include "esp_ota_ops.h"
 #include "esp_http_client.h"
@@ -321,4 +320,3 @@ static void set_error(const char* message) {
     ESP_LOGE(TAG, "%s", message);
     event_logger_add(message, true);
 }
-```

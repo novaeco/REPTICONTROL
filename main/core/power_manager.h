@@ -1,4 +1,3 @@
-```c
 /**
  * @file power_manager.h
  * @brief Power management and battery monitoring system
@@ -77,4 +76,3 @@ esp_err_t power_manager_light_sleep(uint32_t sleep_ms);
 void power_manager_update(void);
 
 #endif /* CORE_POWER_MANAGER_H */
-```

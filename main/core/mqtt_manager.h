@@ -1,4 +1,3 @@
-```c
 #ifndef MQTT_MANAGER_H
 #define MQTT_MANAGER_H
 
@@ -49,4 +48,3 @@ bool mqtt_manager_is_connected(void);
 esp_err_t mqtt_manager_configure_ha_discovery(void);
 
 #endif /* MQTT_MANAGER_H */
-```

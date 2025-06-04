@@ -149,37 +149,47 @@ static void update_lighting(float current_light) {
 
 // Set target temperature
 void climate_controller_set_temp_target(float temp) {
-    if (temp >= 15.0f && temp <= 40.0f) {
-        temp_target = temp;
-        ESP_LOGI(TAG, "Temperature target set to %.1f°C", temp_target);
-        event_logger_add_fmt("Temperature target set to %.1f°C", false, temp_target);
+    if (temp < 15.0f) {
+        temp = 15.0f;
+    } else if (temp > 40.0f) {
+        temp = 40.0f;
     }
+
+    temp_target = temp;
+    ESP_LOGI(TAG, "Temperature target set to %.1f°C", temp_target);
+    event_logger_add_fmt("Temperature target set to %.1f°C", false, temp_target);
 }
 
 // Set target humidity
 void climate_controller_set_humidity_target(float humidity) {
-    if (humidity >= 20.0f && humidity <= 90.0f) {
-        humidity_target = humidity;
-        ESP_LOGI(TAG, "Humidity target set to %.1f%%", humidity_target);
-        event_logger_add_fmt("Humidity target set to %.1f%%", false, humidity_target);
+    if (humidity < 20.0f) {
+        humidity = 20.0f;
+    } else if (humidity > 90.0f) {
+        humidity = 90.0f;
     }
+
+    humidity_target = humidity;
+    ESP_LOGI(TAG, "Humidity target set to %.1f%%", humidity_target);
+    event_logger_add_fmt("Humidity target set to %.1f%%", false, humidity_target);
 }
 
 // Set target light level
 void climate_controller_set_light_target(float light) {
-    if (light >= 0.0f && light <= 100.0f) {
-        light_target = light;
-        ESP_LOGI(TAG, "Light target set to %.1f%%", light_target);
-        event_logger_add_fmt("Light target set to %.1f%%", false, light_target);
+    if (light < 0.0f) {
+        light = 0.0f;
+    } else if (light > 100.0f) {
+        light = 100.0f;
     }
+
+    light_target = light;
+    ESP_LOGI(TAG, "Light target set to %.1f%%", light_target);
+    event_logger_add_fmt("Light target set to %.1f%%", false, light_target);
 }
 
 // Toggle heating system
 void climate_controller_set_heating(bool enable) {
     heating_enabled = enable;
-    if (!enable && heating_active) {
-        heating_active = false;
-    }
+    heating_active = enable;
     ESP_LOGI(TAG, "Heating system %s", enable ? "enabled" : "disabled");
     event_logger_add_fmt("Heating system %s", false, enable ? "enabled" : "disabled");
 }
@@ -187,9 +197,7 @@ void climate_controller_set_heating(bool enable) {
 // Toggle cooling system
 void climate_controller_set_cooling(bool enable) {
     cooling_enabled = enable;
-    if (!enable && cooling_active) {
-        cooling_active = false;
-    }
+    cooling_active = enable;
     ESP_LOGI(TAG, "Cooling system %s", enable ? "enabled" : "disabled");
     event_logger_add_fmt("Cooling system %s", false, enable ? "enabled" : "disabled");
 }
@@ -197,9 +205,7 @@ void climate_controller_set_cooling(bool enable) {
 // Toggle humidifier
 void climate_controller_set_humidifier(bool enable) {
     humidifier_enabled = enable;
-    if (!enable && humidifier_active) {
-        humidifier_active = false;
-    }
+    humidifier_active = enable;
     ESP_LOGI(TAG, "Humidifier %s", enable ? "enabled" : "disabled");
     event_logger_add_fmt("Humidifier %s", false, enable ? "enabled" : "disabled");
 }
@@ -207,9 +213,7 @@ void climate_controller_set_humidifier(bool enable) {
 // Toggle lighting
 void climate_controller_set_lighting(bool enable) {
     lighting_enabled = enable;
-    if (!enable && lighting_active) {
-        lighting_active = false;
-    }
+    lighting_active = enable;
     ESP_LOGI(TAG, "Lighting %s", enable ? "enabled" : "disabled");
     event_logger_add_fmt("Lighting %s", false, enable ? "enabled" : "disabled");
 }
