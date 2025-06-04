@@ -73,7 +73,7 @@ esp_err_t network_manager_init(void) {
 }
 
 // Start Wi-Fi with configuration
-esp_err_t network_manager_wifi_start(wifi_config_t *config) {
+esp_err_t network_manager_wifi_start(rc_wifi_config_t *config) {
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
     
@@ -82,17 +82,17 @@ esp_err_t network_manager_wifi_start(wifi_config_t *config) {
     strncpy((char *)wifi_config.sta.password, config->password, sizeof(wifi_config.sta.password));
     
     switch (config->mode) {
-        case WIFI_MODE_AP:
+        case RC_WIFI_MODE_AP:
             ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
             ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));
             break;
             
-        case WIFI_MODE_STA:
+        case RC_WIFI_MODE_STA:
             ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
             ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
             break;
             
-        case WIFI_MODE_APSTA:
+        case RC_WIFI_MODE_APSTA:
             ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
             ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
             break;
@@ -162,7 +162,7 @@ esp_err_t network_manager_ble_update_sensors(float temperature, float humidity, 
 
 bool network_manager_load_wifi_credentials(char *ssid, size_t ssid_len,
                                            char *password, size_t pass_len,
-                                           wifi_mode_t *mode) {
+                                           rc_wifi_mode_t *mode) {
     nvs_handle_t h;
     if (nvs_open("settings", NVS_READONLY, &h) != ESP_OK) {
         return false;
@@ -178,7 +178,7 @@ bool network_manager_load_wifi_credentials(char *ssid, size_t ssid_len,
     if (nvs_get_i32(h, "wifi_mode", &mode_val) != ESP_OK) {
         mode_val = WIFI_MODE_STA;
     }
-    if (mode) *mode = (wifi_mode_t)mode_val;
+    if (mode) *mode = (rc_wifi_mode_t)mode_val;
     nvs_close(h);
     return true;
 }

@@ -9,19 +9,19 @@
 #include "esp_err.h"
 #include <stdbool.h>
 
-// Wi-Fi modes
+// Wi-Fi modes specific to ReptiControl to avoid conflicts with esp_wifi.h
 typedef enum {
-    WIFI_MODE_AP,      // Access Point mode
-    WIFI_MODE_STA,     // Station mode
-    WIFI_MODE_APSTA    // AP + Station mode
-} wifi_mode_t;
+    RC_WIFI_MODE_AP,      // Access Point mode
+    RC_WIFI_MODE_STA,     // Station mode
+    RC_WIFI_MODE_APSTA    // AP + Station mode
+} rc_wifi_mode_t;
 
-// Wi-Fi configuration
+// Wi-Fi configuration used by the network manager
 typedef struct {
     char ssid[33];
     char password[65];
-    wifi_mode_t mode;
-} wifi_config_t;
+    rc_wifi_mode_t mode;
+} rc_wifi_config_t;
 
 // BLE service UUIDs
 #define BLE_SERVICE_UUID        "91bad492-b950-4226-aa2b-4ede9fa42f59"
@@ -40,7 +40,7 @@ esp_err_t network_manager_init(void);
  * @param config Wi-Fi configuration
  * @return ESP_OK on success
  */
-esp_err_t network_manager_wifi_start(wifi_config_t *config);
+esp_err_t network_manager_wifi_start(rc_wifi_config_t *config);
 
 /**
  * @brief Stop Wi-Fi
@@ -78,7 +78,7 @@ esp_err_t network_manager_ble_update_sensors(float temperature, float humidity, 
 // Load Wi-Fi credentials from NVS
 bool network_manager_load_wifi_credentials(char *ssid, size_t ssid_len,
                                            char *password, size_t pass_len,
-                                           wifi_mode_t *mode);
+                                           rc_wifi_mode_t *mode);
 
  vlhdas-codex/rendre-le-projet-compatible-avec-waveshare-esp32-s3-touch-lc
 #endif /* CORE_NETWORK_MANAGER_H */
