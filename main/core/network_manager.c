@@ -8,6 +8,7 @@
 #include "esp_gatts_api.h"
 #include "esp_bt_device.h"
 #include "event_logger.h"
+#include "nvs.h"
 #include <string.h>
 
 static const char *TAG = "network_manager";
@@ -157,6 +158,29 @@ esp_err_t network_manager_ble_update_sensors(float temperature, float humidity, 
                                 sizeof(light), (uint8_t*)&light);
     
     return ESP_OK;
+}
+
+bool network_manager_load_wifi_credentials(char *ssid, size_t ssid_len,
+                                           char *password, size_t pass_len,
+                                           wifi_mode_t *mode) {
+    nvs_handle_t h;
+    if (nvs_open("settings", NVS_READONLY, &h) != ESP_OK) {
+        return false;
+    }
+    size_t s_len = ssid_len;
+    size_t p_len = pass_len;
+    if (nvs_get_str(h, "wifi_ssid", ssid, &s_len) != ESP_OK ||
+        nvs_get_str(h, "wifi_password", password, &p_len) != ESP_OK) {
+        nvs_close(h);
+        return false;
+    }
+    int32_t mode_val;
+    if (nvs_get_i32(h, "wifi_mode", &mode_val) != ESP_OK) {
+        mode_val = WIFI_MODE_STA;
+    }
+    if (mode) *mode = (wifi_mode_t)mode_val;
+    nvs_close(h);
+    return true;
 }
 
 // Wi-Fi event handler
