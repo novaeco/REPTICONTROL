@@ -8,7 +8,7 @@
 lv_obj_t *ui_system_create(void);
 
 // Update system status
-void ui_system_update_status(int battery_level, bool heating_on, bool cooling_on, 
+void ui_system_update_status(int battery_level, bool heating_on, bool cooling_on,
                            bool humidifier_on, bool lighting_on);
 
 // Update memory and CPU usage stats

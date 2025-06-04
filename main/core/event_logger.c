@@ -23,7 +23,7 @@ static int log_next_index = 0;
 // Initialize the event logger
 void event_logger_init(void) {
     ESP_LOGI(TAG, "Initializing event logger");
-    
+
     // Clear log buffer
     memset(log_buffer, 0, sizeof(log_buffer));
     log_count = 0;
@@ -35,28 +35,28 @@ void event_logger_add(const char* message, bool is_alert) {
     if (message == NULL || strlen(message) == 0) {
         return;
     }
-    
+
     // Log to ESP console
     if (is_alert) {
         ESP_LOGW(TAG, "ALERT: %s", message);
     } else {
         ESP_LOGI(TAG, "%s", message);
     }
-    
+
     // Store in circular buffer
     strncpy(log_buffer[log_next_index].message, message, MAX_LOG_MESSAGE_LEN - 1);
     log_buffer[log_next_index].message[MAX_LOG_MESSAGE_LEN - 1] = '\0';
     log_buffer[log_next_index].is_alert = is_alert;
-    
+
     // Update indices
     log_next_index = (log_next_index + 1) % MAX_LOG_ENTRIES;
     if (log_count < MAX_LOG_ENTRIES) {
         log_count++;
     }
-    
+
     // Update UI
     ui_add_log_entry(message, is_alert);
-    
+
     // Show alert if needed
     if (is_alert) {
         ui_show_alert("Alert", message);
@@ -67,11 +67,11 @@ void event_logger_add(const char* message, bool is_alert) {
 void event_logger_add_fmt(const char* format, bool is_alert, ...) {
     char buffer[MAX_LOG_MESSAGE_LEN];
     va_list args;
-    
+
     va_start(args, is_alert);
     vsnprintf(buffer, MAX_LOG_MESSAGE_LEN, format, args);
     va_end(args);
-    
+
     event_logger_add(buffer, is_alert);
 }
 
@@ -85,6 +85,6 @@ void event_logger_clear(void) {
     memset(log_buffer, 0, sizeof(log_buffer));
     log_count = 0;
     log_next_index = 0;
-    
+
     ESP_LOGI(TAG, "Event log cleared");
 }

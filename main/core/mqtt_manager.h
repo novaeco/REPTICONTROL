@@ -24,7 +24,7 @@
 esp_err_t mqtt_manager_init(void);
 
 // Connect to MQTT broker
-esp_err_t mqtt_manager_connect(const char* broker_url, int port, 
+esp_err_t mqtt_manager_connect(const char* broker_url, int port,
                              const char* username, const char* password);
 
 // Disconnect from MQTT broker

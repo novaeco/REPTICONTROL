@@ -51,22 +51,22 @@ void init_styles(void);
 lv_obj_t *create_card(lv_obj_t *parent, const char *title, int width, int height);
 
 // Create a gauge with label
-lv_obj_t *create_gauge(lv_obj_t *parent, const char *title, const char *unit, 
+lv_obj_t *create_gauge(lv_obj_t *parent, const char *title, const char *unit,
                       int min, int max, lv_color_t color);
 
 // Create a slider with label
-lv_obj_t *create_slider(lv_obj_t *parent, const char *title, int min, int max, 
+lv_obj_t *create_slider(lv_obj_t *parent, const char *title, int min, int max,
                        int value, lv_event_cb_t event_cb);
 
 // Create a toggle switch with label
-lv_obj_t *create_toggle(lv_obj_t *parent, const char *title, bool state, 
+lv_obj_t *create_toggle(lv_obj_t *parent, const char *title, bool state,
                        lv_event_cb_t event_cb);
 
 // Create a badge indicator
 lv_obj_t *create_badge(lv_obj_t *parent, const char *text, lv_color_t color);
 
 // Create a navigation item
-lv_obj_t *create_nav_item(lv_obj_t *parent, const char *icon, const char *text, 
+lv_obj_t *create_nav_item(lv_obj_t *parent, const char *icon, const char *text,
                          bool active, lv_event_cb_t event_cb);
 
 // Add ripple effect to object

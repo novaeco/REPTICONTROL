@@ -11,7 +11,7 @@ lv_obj_t *ui_dashboard_create(void);
 void ui_dashboard_update_sensors(float temperature, float humidity, float light);
 
 // Update dashboard with system status
-void ui_dashboard_update_status(int battery_level, bool heating_on, bool cooling_on, 
+void ui_dashboard_update_status(int battery_level, bool heating_on, bool cooling_on,
                               bool humidifier_on, bool lighting_on);
 
 // Update time display
