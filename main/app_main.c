@@ -1,5 +1,6 @@
 #include "app_main.h"
 #include "drivers/display_driver.h"
+#include "drivers/display_config.h"
 #include "drivers/touch_driver.h"
 #include "ui/screens/ui_first_setup.h"
 #include "ui/ui.h"
@@ -32,10 +33,11 @@ void repticontrol_main(void) {
     ESP_LOGI(TAG, "Initializing ReptiControl application");
 
     // Initialize components
+    settings_init();
+    display_config_init();
     display_init();
     touch_init();
     rtc_init();
-    settings_init();
     event_logger_init();
     climate_controller_init();
     data_simulator_init();
@@ -168,14 +170,14 @@ static void network_task(void *pvParameter) {
     ESP_LOGI(TAG, "Network task started");
 
     // Load Wi-Fi credentials from settings
-    wifi_config_t wifi_config = {0};
+    rc_wifi_config_t wifi_config = {0};
     if (!network_manager_load_wifi_credentials(wifi_config.ssid, sizeof(wifi_config.ssid),
                                                wifi_config.password, sizeof(wifi_config.password),
                                                &wifi_config.mode)) {
         // Fallback to AP mode
         strncpy(wifi_config.ssid, "ReptiControl", sizeof(wifi_config.ssid));
         strncpy(wifi_config.password, "repticontrol123", sizeof(wifi_config.password));
-        wifi_config.mode = WIFI_MODE_AP;
+        wifi_config.mode = RC_WIFI_MODE_AP;
     }
 
     network_manager_wifi_start(&wifi_config);

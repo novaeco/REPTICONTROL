@@ -16,7 +16,7 @@ static void save_event_handler(lv_event_t *e) {
     display_type_t type = lv_dropdown_get_selected(disp_dd) == 0 ? DISPLAY_5_INCH : DISPLAY_7_INCH;
     display_config_set_type(type);
     settings_set_int("display_type", (int)type);
-    settings_set_int("wifi_mode", WIFI_MODE_STA);
+    settings_set_int("wifi_mode", RC_WIFI_MODE_STA);
     const char *ssid = lv_textarea_get_text(ssid_ta);
     const char *pass = lv_textarea_get_text(pass_ta);
     settings_set_int("wifi_config_set", 1);

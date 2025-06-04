@@ -17,7 +17,7 @@ int LCD_PIXEL_CLOCK_HZ = CLK_5_INCH;
 
 static display_type_t current_type = DISPLAY_5_INCH;
 
-__attribute__((constructor)) static void load_display_type(void) {
+void display_config_init(void) {
     int stored = settings_get_int("display_type", (int)DISPLAY_5_INCH);
     display_config_apply((display_type_t)stored);
 }

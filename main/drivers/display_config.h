@@ -9,6 +9,7 @@ typedef enum {
 } display_type_t;
 
 void display_config_apply(display_type_t type);
+void display_config_init(void);
 
 display_type_t display_config_get_type(void);
 void display_config_set_type(display_type_t type);

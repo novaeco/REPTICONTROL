@@ -10,7 +10,7 @@ ReptiControl is an embedded climate control system designed for the Waveshare ES
 - System status monitoring and alerts
 - Event logging and data visualization
 - Battery management and power optimization
-- Intuitive 5" touchscreen interface
+- Intuitive 5" or 7" touchscreen interface
 - First-run wizard to choose screen size and connect to Wi-Fi
 
 ## Hardware Requirements
