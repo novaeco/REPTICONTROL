@@ -136,5 +136,8 @@ bool settings_has_key(const char* key) {
 
 }
 
+
 }
- main
+
+}
+
