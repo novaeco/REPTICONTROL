@@ -36,24 +36,24 @@ static void update_lighting(float current_light);
 // Initialize the climate controller
 void climate_controller_init(void) {
     ESP_LOGI(TAG, "Initializing climate controller");
-    
+
     // Set initial target values
     temp_target = 25.0f;
     humidity_target = 50.0f;
     light_target = 75.0f;
-    
+
     // Enable all systems by default
     heating_enabled = true;
     cooling_enabled = true;
     humidifier_enabled = true;
     lighting_enabled = true;
-    
+
     // All systems start inactive
     heating_active = false;
     cooling_active = false;
     humidifier_active = false;
     lighting_active = false;
-    
+
     event_logger_add("Climate controller initialized", false);
 }
 
@@ -63,7 +63,7 @@ void climate_controller_update(void) {
     float current_temp = data_simulator_get_temperature();
     float current_humidity = data_simulator_get_humidity();
     float current_light = data_simulator_get_light();
-    
+
     // Update each system
     update_heating_cooling(current_temp);
     update_humidifier(current_humidity);
@@ -83,7 +83,7 @@ static void update_heating_cooling(float current_temp) {
         heating_active = false;
         event_logger_add("Heating deactivated", false);
     }
-    
+
     // Check if cooling should be activated
     if (cooling_enabled && !cooling_active && current_temp > (temp_target + TEMP_HYSTERESIS)) {
         cooling_active = true;
@@ -95,12 +95,12 @@ static void update_heating_cooling(float current_temp) {
         cooling_active = false;
         event_logger_add("Cooling deactivated", false);
     }
-    
+
     // Apply influence to the simulated environment
     if (heating_active) {
         data_simulator_apply_heating();
     }
-    
+
     if (cooling_active) {
         data_simulator_apply_cooling();
     }
@@ -118,7 +118,7 @@ static void update_humidifier(float current_humidity) {
         humidifier_active = false;
         event_logger_add("Humidifier deactivated", false);
     }
-    
+
     // Apply influence to the simulated environment
     if (humidifier_active) {
         data_simulator_apply_humidifier();
@@ -138,7 +138,7 @@ static void update_lighting(float current_light) {
         lighting_active = false;
         event_logger_add("Lighting disabled", false);
     }
-    
+
     // Apply target to simulator
     if (lighting_active) {
         data_simulator_set_light_target(light_target);

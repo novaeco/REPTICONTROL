@@ -18,14 +18,14 @@ static void lvgl_timer_cb(lv_timer_t *timer) {
 // Initialize LVGL timer
 esp_err_t ui_timer_init(void) {
     ESP_LOGI(TAG, "Initializing UI timer");
-    
+
     // Create LVGL timer
     lvgl_timer = lv_timer_create(lvgl_timer_cb, portTICK_PERIOD_MS, NULL);
     if (!lvgl_timer) {
         ESP_LOGE(TAG, "Failed to create LVGL timer");
         return ESP_FAIL;
     }
-    
+
     ESP_LOGI(TAG, "UI timer initialized");
     return ESP_OK;
 }

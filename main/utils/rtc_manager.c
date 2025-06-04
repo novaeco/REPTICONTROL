@@ -9,7 +9,7 @@ static const char *TAG = "rtc_manager";
 // Initialize RTC
 void rtc_init(void) {
     ESP_LOGI(TAG, "Initializing RTC manager");
-    
+
     // Set system time to a default value (2025-01-01 12:00:00)
     struct tm default_time;
     default_time.tm_year = 2025 - 1900;
@@ -18,9 +18,9 @@ void rtc_init(void) {
     default_time.tm_hour = 12;    // 12:00
     default_time.tm_min = 0;
     default_time.tm_sec = 0;
-    
+
     rtc_set_time(&default_time);
-    
+
     ESP_LOGI(TAG, "RTC initialized and set to default time");
 }
 
@@ -36,9 +36,9 @@ void rtc_set_time(const struct tm *time_info) {
     struct timeval tv;
     tv.tv_sec = mktime((struct tm *)time_info);
     tv.tv_usec = 0;
-    
+
     settimeofday(&tv, NULL);
-    
+
     char time_str[64];
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", time_info);
     ESP_LOGI(TAG, "System time set to: %s", time_str);

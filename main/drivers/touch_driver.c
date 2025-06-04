@@ -14,13 +14,13 @@ static lv_indev_drv_t indev_drv;
 // In a real implementation, this would communicate with the touch controller
 esp_err_t touch_init(void) {
     ESP_LOGI(TAG, "Initializing touch driver");
-    
+
     // Initialize the input device driver
     lv_indev_drv_init(&indev_drv);
     indev_drv.type = LV_INDEV_TYPE_POINTER;  // Touchscreen
     indev_drv.read_cb = touch_read_cb;
     lv_indev_drv_register(&indev_drv);
-    
+
     ESP_LOGI(TAG, "Touch driver initialized");
     return ESP_OK;
 }

@@ -30,7 +30,7 @@ screen_t ui_get_active_screen(void);
 void ui_update_sensor_data(float temperature, float humidity, float light);
 
 // Update UI with system status
-void ui_update_system_status(int battery_level, bool heating_on, bool cooling_on, 
+void ui_update_system_status(int battery_level, bool heating_on, bool cooling_on,
                              bool humidifier_on, bool lighting_on);
 
 // Add a log entry to the log screen
