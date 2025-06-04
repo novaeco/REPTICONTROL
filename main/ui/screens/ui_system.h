@@ -1,4 +1,3 @@
-```c
 #ifndef UI_SYSTEM_H
 #define UI_SYSTEM_H
 
@@ -28,4 +27,3 @@ void ui_system_reboot(void);
 void ui_system_shutdown(void);
 
 #endif /* UI_SYSTEM_H */
-```

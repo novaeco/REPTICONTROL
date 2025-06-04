@@ -1,4 +1,3 @@
-```c
 #ifndef OTA_MANAGER_H
 #define OTA_MANAGER_H
 
@@ -40,4 +39,3 @@ esp_err_t ota_manager_verify_update(void);
 esp_err_t ota_manager_cancel_update(void);
 
 #endif /* OTA_MANAGER_H */
-```

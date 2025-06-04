@@ -1,4 +1,3 @@
-```c
 #include "power_manager.h"
 #include "esp_adc/adc_oneshot.h"
 #include "esp_adc/adc_cali.h"
@@ -241,4 +240,3 @@ void power_manager_update(void) {
         }
     }
 }
-```

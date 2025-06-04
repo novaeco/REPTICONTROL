@@ -64,7 +64,7 @@ void system_monitor_update(void) {
     last_update_time = now;
     
     // For simulation purposes, drain faster
-    float discharge = BATTERY_DISCHARGE_RATE * hours_elapsed * 100.0f;
+    float discharge = BATTERY_DISCHARGE_RATE * hours_elapsed;
     battery_level -= (int)discharge;
     
     // Add small random variations
