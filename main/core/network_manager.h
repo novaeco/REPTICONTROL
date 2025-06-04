@@ -80,8 +80,12 @@ bool network_manager_load_wifi_credentials(char *ssid, size_t ssid_len,
                                            char *password, size_t pass_len,
                                            rc_wifi_mode_t *mode);
 
- vlhdas-codex/rendre-le-projet-compatible-avec-waveshare-esp32-s3-touch-lc
+
+#endif /* CORE_NETWORK_MANAGER_H */
+
+
 #endif /* CORE_NETWORK_MANAGER_H */
 
 #endif /* CORE_NETWORK_MANAGER_H */
+ main
  main

@@ -7,7 +7,7 @@
 lv_obj_t *ui_schedule_create(void);
 
 // Add a scheduled event to the calendar
-void ui_schedule_add_event(int day, int hour, int minute, 
+void ui_schedule_add_event(int day, int hour, int minute,
                         float temperature, float humidity, float light);
 
 // Remove a scheduled event from the calendar

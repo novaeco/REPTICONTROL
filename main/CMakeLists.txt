@@ -1,14 +1,13 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Project declaration
-project(REPTICONTROL VERSION 1.0.0 LANGUAGES C)
 
 # Set C standard
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # Automatically collect all source files
-file(GLOB_RECURSE COMPONENT_SRCS 
+file(GLOB_RECURSE COMPONENT_SRCS
     "*.c"
 )
 
@@ -36,7 +35,7 @@ target_compile_definitions(${COMPONENT_LIB} PUBLIC
 )
 
 # Configure compiler warnings
-target_compile_options(${COMPONENT_LIB} PRIVATE 
+target_compile_options(${COMPONENT_LIB} PRIVATE
     -Wall
     -Wextra
     -Werror
