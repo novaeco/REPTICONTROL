@@ -49,7 +49,3 @@ static inline bool settings_has_display_type(void) {
 
 #endif /* SETTINGS_MANAGER_H */
 
-#endif /* SETTINGS_MANAGER_H */
-
-#endif /* SETTINGS_MANAGER_H */
-
