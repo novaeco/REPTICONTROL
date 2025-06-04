@@ -1,6 +1,7 @@
 #include "app_main.h"
 #include "drivers/display_driver.h"
 #include "drivers/touch_driver.h"
+#include "ui/screens/ui_first_setup.h"
 #include "ui/ui.h"
 #include "core/climate_controller.h"
 #include "core/data_simulator.h"
@@ -11,6 +12,7 @@
 #include "core/network_manager.h"
 #include "core/watchdog_manager.h"
 #include "utils/rtc_manager.h"
+#include <string.h>
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -44,6 +46,16 @@ void repticontrol_main(void) {
     
     // Initialize the UI (with splash screen)
     ui_init();
+
+    // First-run setup if necessary
+    if (!settings_has_display_type()) {
+        ui_first_setup_create();
+        while (!ui_first_setup_is_complete()) {
+            ui_update();
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
+        display_config_apply(display_config_get_type());
+    }
     
     // Register tasks with watchdog
     watchdog_manager_register_task("ui_task", 2000);
@@ -155,13 +167,17 @@ static void power_management_task(void *pvParameter) {
 static void network_task(void *pvParameter) {
     ESP_LOGI(TAG, "Network task started");
     
-    // Configure Wi-Fi in AP mode by default
-    wifi_config_t wifi_config = {
-        .mode = WIFI_MODE_AP,
-        .ssid = "ReptiControl",
-        .password = "repticontrol123"
-    };
-    
+    // Load Wi-Fi credentials from settings
+    wifi_config_t wifi_config = {0};
+    if (!network_manager_load_wifi_credentials(wifi_config.ssid, sizeof(wifi_config.ssid),
+                                               wifi_config.password, sizeof(wifi_config.password),
+                                               &wifi_config.mode)) {
+        // Fallback to AP mode
+        strncpy(wifi_config.ssid, "ReptiControl", sizeof(wifi_config.ssid));
+        strncpy(wifi_config.password, "repticontrol123", sizeof(wifi_config.password));
+        wifi_config.mode = WIFI_MODE_AP;
+    }
+
     network_manager_wifi_start(&wifi_config);
     network_manager_ble_start();
     
