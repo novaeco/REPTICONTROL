@@ -68,12 +68,32 @@ esp_err_t display_init(void) {
     panel_config.timings.pclk_hz = LCD_PIXEL_CLOCK_HZ;
     panel_config.timings.h_res = LCD_H_RES;
     panel_config.timings.v_res = LCD_V_RES;
+
+    // Adjust RGB timing parameters depending on the selected panel
+    display_type_t dtype = display_config_get_type();
+    if (dtype == DISPLAY_7_INCH) {
+        panel_config.timings.hsync_pulse_width = 48;
+        panel_config.timings.hsync_back_porch = 40;
+        panel_config.timings.hsync_front_porch = 40;
+        panel_config.timings.vsync_pulse_width = 3;
+        panel_config.timings.vsync_back_porch = 29;
+        panel_config.timings.vsync_front_porch = 13;
+    } else {
+        panel_config.timings.hsync_pulse_width = 20;
+        panel_config.timings.hsync_back_porch = 140;
+        panel_config.timings.hsync_front_porch = 160;
+        panel_config.timings.vsync_pulse_width = 3;
+        panel_config.timings.vsync_back_porch = 20;
+        panel_config.timings.vsync_front_porch = 12;
+    }
+
     panel_config.timings.hsync_pulse_width = 20;
     panel_config.timings.hsync_back_porch = 140;
     panel_config.timings.hsync_front_porch = 160;
     panel_config.timings.vsync_pulse_width = 3;
     panel_config.timings.vsync_back_porch = 20;
     panel_config.timings.vsync_front_porch = 12;
+ main
     panel_config.timings.flags.pclk_active_neg = 1;
     panel_config.flags.fb_in_psram = 1;
     panel_config.flags.refresh_on_demand = 0;

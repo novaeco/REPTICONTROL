@@ -47,4 +47,8 @@ static inline bool settings_has_display_type(void) {
     return settings_has_key("display_type");
 }
 
+
 #endif /* SETTINGS_MANAGER_H */
+
+#endif /* SETTINGS_MANAGER_H */
+ main
