@@ -65,18 +65,24 @@ idf.py menuconfig
 # Configure partition table
 ```
 
+
 3. Fetch required components:
-```bash
+bash
 idf.py add-dependency espressif/bt
 idf.py add-dependency lvgl/lvgl
 # The following components are included with ESP-IDF:
 # - mqtt
 # - esp_https_ota
 # - cjson
-```
+
+3. Fetch Bluetooth component:
+bash
+idf.py add-dependency espressif/bt
+ main
+
 
 4. Build the project:
-```bash
+bash
 idf.py build
 ```
 
