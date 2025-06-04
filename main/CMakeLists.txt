@@ -25,7 +25,7 @@ set(COMPONENT_ADD_INCLUDEDIRS
 idf_component_register(
     SRCS ${COMPONENT_SRCS}
     INCLUDE_DIRS ${COMPONENT_ADD_INCLUDEDIRS}
-    REQUIRES driver esp_lcd esp_timer esp_wifi esp_event nvs_flash esp_pm esp_adc esp_bt esp_system freertos lvgl
+    REQUIRES driver esp_lcd esp_timer esp_wifi esp_event nvs_flash esp_pm esp_adc bt esp_system freertos lvgl
 )
 
 # Configure PSRAM

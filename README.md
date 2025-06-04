@@ -65,12 +65,17 @@ idf.py menuconfig
 # Configure partition table
 ```
 
-3. Build the project:
+3. Fetch Bluetooth component:
+```bash
+idf.py add-dependency espressif/bt
+```
+
+4. Build the project:
 ```bash
 idf.py build
 ```
 
-4. Flash to device:
+5. Flash to device:
 ```bash
 idf.py -p /dev/ttyUSB0 flash monitor
 ```
